@@ -13,6 +13,7 @@ const loadIssues = () => {
 
 const displayIssues=(issues)=>{
     const cardContainer =document.getElementById('card-container');
+    const issueCount =document.getElementById('issue-count');
     cardContainer.innerHTML='';
 
     for(let issue of issues){
@@ -43,7 +44,12 @@ const displayIssues=(issues)=>{
             </div>
         `
         cardContainer.append(cardDiv);
+        
+        issueCount.innerText=cardContainer.children.length;
     }
 }
 
 loadIssues();
+
+
+
