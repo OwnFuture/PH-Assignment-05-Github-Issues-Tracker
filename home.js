@@ -3,12 +3,15 @@ const createElements=(arr)=>{
     return(htmlElements.join(" "));
 }
 
-
+let allIssues = [];
 
 const loadIssues = () => {
     fetch("https://phi-lab-server.vercel.app/api/v1/lab/issues")
         .then(res => res.json())
-        .then(data => displayIssues(data.data)); 
+        .then(data => {
+            allIssues = data.data;  
+            displayIssues(allIssues);
+        }); 
 };
 
 const displayIssues=(issues)=>{
@@ -50,6 +53,27 @@ const displayIssues=(issues)=>{
 }
 
 loadIssues();
+
+const allBtn = document.getElementById("all-btn");
+const openBtn = document.getElementById("open-btn");
+const closedBtn = document.getElementById("closed-btn");
+
+allBtn.addEventListener("click", () => {
+    displayIssues(allIssues);
+});
+
+openBtn.addEventListener("click", () => {
+    const openIssues = allIssues.filter(issue => issue.status === "open");
+    displayIssues(openIssues);
+});
+
+closedBtn.addEventListener("click", () => {
+    const closedIssues = allIssues.filter(issue => issue.status === "closed");
+    displayIssues(closedIssues);
+});
+
+
+
 
 
 
