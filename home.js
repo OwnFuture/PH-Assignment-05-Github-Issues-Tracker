@@ -58,18 +58,35 @@ const allBtn = document.getElementById("all-btn");
 const openBtn = document.getElementById("open-btn");
 const closedBtn = document.getElementById("closed-btn");
 
+//Button Toggle
+
+const buttons =[allBtn,openBtn,closedBtn];
+
+const activeButton=(active)=>{
+    buttons.forEach(btn=>{
+        if(btn===active){
+            btn.classList.add('btn-primary');
+        }else{
+            btn.classList.remove('btn-primary');
+        }
+    })
+}
+
 allBtn.addEventListener("click", () => {
     displayIssues(allIssues);
+    activeButton(allBtn);
 });
 
 openBtn.addEventListener("click", () => {
     const openIssues = allIssues.filter(issue => issue.status === "open");
     displayIssues(openIssues);
+    activeButton(openBtn);
 });
 
 closedBtn.addEventListener("click", () => {
     const closedIssues = allIssues.filter(issue => issue.status === "closed");
     displayIssues(closedIssues);
+    activeButton(closedBtn);
 });
 
 
