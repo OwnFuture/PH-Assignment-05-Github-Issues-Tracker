@@ -3,9 +3,29 @@ const createElements=(arr)=>{
     return(htmlElements.join(" "));
 }
 
+//manage spinner
+
+const manageSpinner = (status)=>{
+    if(status==true){
+        const spin = document.getElementById('spinner');
+        spin.classList.remove('hidden');
+        spin.classList.add('flex');
+        document.getElementById('open-closed').classList.add('hidden');
+        document.getElementById('card-container').classList.add('hidden');
+    }else{
+        const spin = document.getElementById('spinner');
+        spin.classList.add('hidden');
+        spin.classList.remove('flex');
+        document.getElementById('open-closed').classList.remove('hidden');
+        document.getElementById('card-container').classList.remove('hidden');
+    }
+}
+
+
 let allIssues = [];
 
 const loadIssues = () => {
+    manageSpinner(true);
     fetch("https://phi-lab-server.vercel.app/api/v1/lab/issues")
         .then(res => res.json())
         .then(data => {
@@ -95,6 +115,7 @@ const displayIssues=(issues)=>{
         
         issueCount.innerText=cardContainer.children.length;
     }
+    manageSpinner(false);
 }
 
 loadIssues();
