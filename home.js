@@ -14,6 +14,51 @@ const loadIssues = () => {
         }); 
 };
 
+//modal section
+
+const loadModal=async(id)=>{
+    const url = `https://phi-lab-server.vercel.app/api/v1/lab/issue/${id}`;
+    const res = await fetch(url);
+    const details = await res.json();
+    displayModal(details.data);
+}
+
+const displayModal = (modal)=>{
+    const modalContainer = document.getElementById('modal-container');
+    modalContainer.innerHTML=`
+                <div class="space-y-2">
+                    <h2 class="text-[18px] font-bold">${modal.title}</h2>
+                    <p class="text-[14px]"> <span class="px-2 py-1 rounded text-white ${
+        modal.status === 'open' ? 'bg-green-500' : 'bg-red-500'}">
+        ${modal.status}</span> . ${modal.status} by ${modal.author} . ${modal.createdAt.split('T')[0]}</p>
+                </div>
+                <div class="my-5">
+                        ${createElements(modal.labels)}
+                </div>
+                <div>
+                    <p class="text-[14px]">${modal.description}</p>
+                </div>
+                <div class="flex justify-around items-center">
+                    <div>
+                        <p class="text-[14px]">Assignee :</p>
+                        <h2 class="font-bold">${modal.author}</h2>
+                    </div>
+                    <div>
+                        <p>Priority :</p>
+                        <p  class="px-2 py-1 rounded text-white text-xs ${
+                        modal.priority === 'high' 
+                        ? 'bg-red-500' 
+                        : modal.priority === 'medium' 
+                        ? 'bg-yellow-500 text-black' 
+                        : 'bg-gray-500'
+                    }">${modal.priority}</p>
+                    </div>
+                </div>
+    `;
+    document.getElementById('my_modal_5').showModal();
+}
+
+
 const displayIssues=(issues)=>{
     const cardContainer =document.getElementById('card-container');
     const issueCount =document.getElementById('issue-count');
@@ -22,7 +67,7 @@ const displayIssues=(issues)=>{
     for(let issue of issues){
         const cardDiv=document.createElement('div');
         cardDiv.innerHTML=`
-         <div class="card bg-white rounded-xl p-5 space-y-3 h-full border-t-4 ${issue.status==='open' ? 'border-green-500' : 'border-purple-500'}">
+         <div onclick="loadModal(${issue.id})" class="card bg-white rounded-xl p-5 space-y-3 h-full border-t-4 ${issue.status==='open' ? 'border-green-500' : 'border-purple-500'}">
                 <div class="flex justify-between">
                     <img src="${issue.status=='open' ? './B13-A5-Github-Issue-Tracker/assets/Open-Status.png' : './B13-A5-Github-Issue-Tracker/assets/Closed- Status .png'}" alt="">
                     <p class="px-2 py-1 rounded text-white text-xs ${
@@ -42,7 +87,7 @@ const displayIssues=(issues)=>{
                 <div>${createElements(issue.labels)}</div><hr>
                 <div>
                     <h2 class="font-bold text-[14px]">#${issue.id} by ${issue.author}</h2>
-                    <p class="text-[12px]">${issue.createdAt}</p>
+                    <p class="text-[12px]">${issue.createdAt.split('T')[0]}</p>
                 </div>
             </div>
         `
